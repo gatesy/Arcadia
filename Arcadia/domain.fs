@@ -5,4 +5,3 @@ namespace Arcadia
 
 type Pebble = White | Black
 
-type Board = Pebble Option list list
