@@ -1,4 +1,4 @@
-module Arcadia.Service.App
+namespace Arcadia.Service
 
 open System
 open System.IO
@@ -8,35 +8,39 @@ open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 
-let webApp =
-    choose [
-        GET >=>
-            choose [
-                route "/" >=> htmlFile "pages/index.html"
-                // Add a route for getting the board configuration
-            ]
-        setStatusCode 404 >=> text "Not Found" ]
+[<RequireQualifiedAccess>]
+module App =
 
-let configureApp (app : IApplicationBuilder) =
-    app
-        .UseStaticFiles()
-        .UseGiraffe(webApp)
+    let webApp =
+        choose [
+            GET >=>
+                choose [
+                    route "/" >=> htmlFile "pages/index.html"
+                    route "/board" >=> Board.boardHandler Board.testBoard
+                    // Add a route for getting the board configuration
+                ]
+            setStatusCode 404 >=> text "Not Found" ]
 
-let configureServices (services : IServiceCollection) =
-    services.AddGiraffe() |> ignore
+    let configureApp (app : IApplicationBuilder) =
+        app
+            .UseStaticFiles()
+            .UseGiraffe(webApp)
 
-[<EntryPoint>]
-let main args =
-    let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot     = Path.Combine(contentRoot, "pages")
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(
-            fun webHostBuilder ->
-                webHostBuilder
-                    .Configure(Action<IApplicationBuilder> configureApp)
-                    .ConfigureServices(configureServices)
-                    .UseWebRoot(webRoot)
-                    |> ignore)
-        .Build()
-        .Run()
-    0
+    let configureServices (services : IServiceCollection) =
+        services.AddGiraffe() |> ignore
+
+    [<EntryPoint>]
+    let main args =
+        let contentRoot = Directory.GetCurrentDirectory()
+        let webRoot     = Path.Combine(contentRoot, "pages")
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(
+                fun webHostBuilder ->
+                    webHostBuilder
+                        .Configure(Action<IApplicationBuilder> configureApp)
+                        .ConfigureServices(configureServices)
+                        .UseWebRoot(webRoot)
+                        |> ignore)
+            .Build()
+            .Run()
+        0

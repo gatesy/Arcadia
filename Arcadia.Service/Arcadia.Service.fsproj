@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Board.fs" />
     <Compile Include="Program.fs" />
     <Content Include="pages\draw.js" />
     <Content Include="pages\index.html" />

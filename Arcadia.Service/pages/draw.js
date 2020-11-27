@@ -39,13 +39,15 @@ function drawPebble(colour, col, row) {
 ctx.translate(cell_size, cell_size);
 drawBoard();
 
-// TODO Async query the /board endpoint and use this to paint the board.
-
-drawPebble("black", 10,10);
-drawPebble("black", 9,9);
-drawPebble("white", 8,9);
-drawPebble("white", 1,1);
-drawPebble("black", 17,17);
+// Get the board layout from web app
+fetch("/board").then(function(response) {
+    response.text().then(function(text) {
+        document.getElementById("scratch").innerHTML = text;
+        JSON.parse(text).forEach(element => {
+            drawPebble(element.pebble.case, element.x, element.y);
+        });
+    });
+});
 
 // Support clicking on the cells
 canvas.addEventListener("click", function(event) {
