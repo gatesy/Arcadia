@@ -34,6 +34,10 @@ function drawPebble(colour, row, col) {
     ctx.stroke();
 }
 
+// TODO Async query the /board endpoint and use this to paint the board.
+
 drawPebble("black", 10, 10);
 drawPebble("black", 9, 9);
 drawPebble("white", 8,9);
+
+// TODO support clicking on cells - just print out the cell

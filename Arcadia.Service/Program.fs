@@ -15,7 +15,7 @@ let webApp =
         GET >=>
             choose [
                 route "/" >=> htmlFile "pages/index.html"
-          
+                // Add a route for getting the board configuration
             ]
         setStatusCode 404 >=> text "Not Found" ]
 
