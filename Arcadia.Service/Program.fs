@@ -3,10 +3,8 @@ module Arcadia.Service.App
 open System
 open System.IO
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Hosting
-open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 
@@ -30,15 +28,14 @@ let configureServices (services : IServiceCollection) =
 [<EntryPoint>]
 let main args =
     let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot     = Path.Combine(contentRoot, "WebRoot")
+    let webRoot     = Path.Combine(contentRoot, "pages")
     Host.CreateDefaultBuilder(args)
         .ConfigureWebHostDefaults(
             fun webHostBuilder ->
                 webHostBuilder
-                    
                     .Configure(Action<IApplicationBuilder> configureApp)
                     .ConfigureServices(configureServices)
-                    .UseWebRoot("pages")
+                    .UseWebRoot(webRoot)
                     |> ignore)
         .Build()
         .Run()
